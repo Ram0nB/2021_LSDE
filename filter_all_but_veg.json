@@ -1,0 +1,14 @@
+[
+        {
+            "type": "readers.las",
+            "filename": "C_32FN1.LAZ"
+        },
+	{
+	    "type":"filters.range",
+	    "limits":"Classification[6:6]"
+	},
+        {
+            "type":"writers.las",
+            "filename":"out.laz"
+        }
+]
