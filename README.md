@@ -4,6 +4,7 @@
 
 - [Project Relevance](#project-relevance)
 - [Installation](#installation)
+- [Visualisation](#visualisation)
 
 ### Project Relevance
 Since climate change is currently one of the larger global challenges that humanity is facing, tools to monitor variables
@@ -22,9 +23,9 @@ pip install xxxx
 ```
 
 ### Pipeline
+[Link to report](Report.pdf)
 
-
----------------
+<!-- ---------------
 - Cluster 1
     - 8.4 ML
     - Apache Spark 3.1.2
@@ -48,4 +49,4 @@ pip install xxxx
     - Worker: i3.xlarge (max24)
 
 
---------------
+-------------- -->
