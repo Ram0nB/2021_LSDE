@@ -38,11 +38,11 @@ pip install laspy[lazrs,laszip]
 ### Pipeline
 [Link to report](Report.pdf)
 
-[Pipeline](pics/drawing_new.png)
+![Pipeline](pictures/drawing_new.png)
 
 We used PointCNN for classification, which is a generalization of a neural network, which can work on non-regularly spaced grids.
 
-[PointCNN](pics/pointcnn.png)
+![PointCNN](pictures/pointcnn.png)
 
 <!-- ---------------
 - Cluster 1
