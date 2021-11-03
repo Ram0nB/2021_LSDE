@@ -11,6 +11,9 @@ that contribute to climate change are therefore of uttermost importance. Since t
 goal of this project is to count the number of trees in the Netherlands based on the Actueel Hoogtebestand Nederland
 (AHN3) lidar point-cloud data set.
 
+### Visualisation
+[link to website](https://ram0nb.github.io/2021_LSDE/)
+
 ### Installation
 Please don't. Generally causes a lot of package errors. If you do want to, please follow instructions below:
 
