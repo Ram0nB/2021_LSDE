@@ -1,7 +1,7 @@
 # 2021 Large Scale Data Engineering (LSDE)
 ## Mehmet Ege Arkin, Ramon Bussing, Mario van Rooij
 
-
+- [Report](Report.pdf)
 - [Project Relevance](#project-relevance)
 - [Installation](#installation)
 - [Visualisation](https://ram0nb.github.io/2021_LSDE/)
@@ -36,7 +36,6 @@ pip install laspy[lazrs,laszip]
 ```
 
 ### Pipeline
-[Link to report](Report.pdf)
 
 ![Pipeline](pictures/drawing_new.png)
 
