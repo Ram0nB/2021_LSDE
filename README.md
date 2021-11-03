@@ -1,4 +1,4 @@
-# 2021 Large Scale Data Engeneering (LSDE)
+# 2021 Large Scale Data Engineering (LSDE)
 ## Mehmet Ege Arkin, Ramon Bussing, Mario van Rooij
 
 
@@ -22,8 +22,27 @@ Please don't. Generally causes a lot of package errors. If you do want to, pleas
 pip install xxxx
 ```
 
+On 2 separate machines/environments run:
+
+```
+conda install --revision 0 
+&& conda install -c esri arcgis_learn=1.8.5
+```
+
+and 
+
+```
+pip install laspy[lazrs,laszip]
+```
+
 ### Pipeline
 [Link to report](Report.pdf)
+
+![Pipeline](pictures/drawing_new.png)
+
+We used PointCNN for classification, which is a generalization of a neural network, which can work on non-regularly spaced grids.
+
+![PointCNN](pictures/pointcnn.png)
 
 <!-- ---------------
 - Cluster 1
@@ -50,3 +69,5 @@ pip install xxxx
 
 
 -------------- -->
+
+
