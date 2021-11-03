@@ -1,0 +1,1759 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <style>
+        #map {
+            width: leaflet(width = "100%");
+            height: 500px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+
+        <h1> Tree Count Amsterdam</h1>
+        <h2> Mehmet Arkin, Ramon Bussing, Mario van Rooij</h2>
+
+        <div id="map">
+        </div>
+
+        <h2> PointCNN example </h2>>
+        <img src="images/SampleIMG.jpg">
+
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="data/TreeCount_1.js"></script>
+        <script src="data/SampleImageLocation_2.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+            highlightLayer.openPopup();
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:20, minZoom:10
+        }).fitBounds([[52.28285656841447,4.823938725548772],[52.386855746367324,5.025689454713811]]);
+        var hash = new L.Hash(map);
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_Google_0');
+        map.getPane('pane_Google_0').style.zIndex = 400;
+        var layer_Google_0 = L.tileLayer('http://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}', {
+            pane: 'pane_Google_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 10,
+            maxZoom: 20,
+            minNativeZoom: 0,
+            maxNativeZoom: 18
+        });
+        layer_Google_0;
+        map.addLayer(layer_Google_0);
+        function pop_TreeCount_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>fid</strong><br />' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">X min</th>\
+                        <td>' + (feature.properties['left'] !== null ? autolinker.link(feature.properties['left'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Y min</th>\
+                        <td>' + (feature.properties['bottom'] !== null ? autolinker.link(feature.properties['bottom'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">X max</th>\
+                        <td>' + (feature.properties['right'] !== null ? autolinker.link(feature.properties['right'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Y max</th>\
+                        <td>' + (feature.properties['top'] !== null ? autolinker.link(feature.properties['top'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Tree Count</th>\
+                        <td>' + (feature.properties['Tree Count'] !== null ? autolinker.link(feature.properties['Tree Count'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_TreeCount_1_0(feature) {
+            if (feature.properties['Tree Count'] >= 0.000000 && feature.properties['Tree Count'] <= 2.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 2.000000 && feature.properties['Tree Count'] <= 4.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(7,8,5,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 4.000000 && feature.properties['Tree Count'] <= 6.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(13,16,10,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 6.000000 && feature.properties['Tree Count'] <= 8.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(20,23,16,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 8.000000 && feature.properties['Tree Count'] <= 10.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(26,31,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 10.000000 && feature.properties['Tree Count'] <= 12.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(33,39,26,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 12.000000 && feature.properties['Tree Count'] <= 14.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(39,47,31,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 14.000000 && feature.properties['Tree Count'] <= 16.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(46,55,36,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 16.000000 && feature.properties['Tree Count'] <= 18.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(53,62,41,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 18.000000 && feature.properties['Tree Count'] <= 20.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(59,70,47,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 20.000000 && feature.properties['Tree Count'] <= 22.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(66,78,52,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 22.000000 && feature.properties['Tree Count'] <= 24.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(72,86,57,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 24.000000 && feature.properties['Tree Count'] <= 26.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(79,94,62,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 26.000000 && feature.properties['Tree Count'] <= 28.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(85,101,67,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 28.000000 && feature.properties['Tree Count'] <= 30.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(92,109,73,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 30.000000 && feature.properties['Tree Count'] <= 32.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(99,117,78,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 32.000000 && feature.properties['Tree Count'] <= 34.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(105,125,83,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 34.000000 && feature.properties['Tree Count'] <= 36.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(112,133,88,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 36.000000 && feature.properties['Tree Count'] <= 38.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(118,140,93,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 38.000000 && feature.properties['Tree Count'] <= 40.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(125,148,99,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 40.000000 && feature.properties['Tree Count'] <= 42.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(132,156,104,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 42.000000 && feature.properties['Tree Count'] <= 44.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(138,164,109,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 44.000000 && feature.properties['Tree Count'] <= 46.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(145,172,114,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 46.000000 && feature.properties['Tree Count'] <= 48.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(151,179,119,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 48.000000 && feature.properties['Tree Count'] <= 50.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(158,187,124,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 50.000000 && feature.properties['Tree Count'] <= 52.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(164,195,130,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 52.000000 && feature.properties['Tree Count'] <= 54.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(171,203,135,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 54.000000 && feature.properties['Tree Count'] <= 56.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(178,211,140,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 56.000000 && feature.properties['Tree Count'] <= 58.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(184,218,145,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 58.000000 && feature.properties['Tree Count'] <= 60.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(191,226,150,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 60.000000 && feature.properties['Tree Count'] <= 62.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(193,229,152,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 62.000000 && feature.properties['Tree Count'] <= 64.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(190,228,151,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 64.000000 && feature.properties['Tree Count'] <= 66.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(188,227,150,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 66.000000 && feature.properties['Tree Count'] <= 68.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(185,226,149,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 68.000000 && feature.properties['Tree Count'] <= 70.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(183,225,148,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 70.000000 && feature.properties['Tree Count'] <= 72.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(180,224,147,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 72.000000 && feature.properties['Tree Count'] <= 74.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(178,223,146,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 74.000000 && feature.properties['Tree Count'] <= 76.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(175,222,145,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 76.000000 && feature.properties['Tree Count'] <= 78.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(173,221,144,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 78.000000 && feature.properties['Tree Count'] <= 80.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(170,220,143,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 80.000000 && feature.properties['Tree Count'] <= 82.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(168,219,142,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 82.000000 && feature.properties['Tree Count'] <= 84.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(165,218,141,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 84.000000 && feature.properties['Tree Count'] <= 86.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(163,216,139,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 86.000000 && feature.properties['Tree Count'] <= 88.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(160,215,138,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 88.000000 && feature.properties['Tree Count'] <= 90.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(158,214,137,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 90.000000 && feature.properties['Tree Count'] <= 92.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(155,213,136,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 92.000000 && feature.properties['Tree Count'] <= 94.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(153,212,135,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 94.000000 && feature.properties['Tree Count'] <= 96.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(150,211,134,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 96.000000 && feature.properties['Tree Count'] <= 98.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(148,210,133,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 98.000000 && feature.properties['Tree Count'] <= 100.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(145,209,132,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 100.000000 && feature.properties['Tree Count'] <= 102.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(143,208,131,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 102.000000 && feature.properties['Tree Count'] <= 104.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(140,207,130,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 104.000000 && feature.properties['Tree Count'] <= 106.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(138,206,129,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 106.000000 && feature.properties['Tree Count'] <= 108.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(135,205,128,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 108.000000 && feature.properties['Tree Count'] <= 110.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(133,203,126,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 110.000000 && feature.properties['Tree Count'] <= 112.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(130,202,125,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 112.000000 && feature.properties['Tree Count'] <= 114.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(128,201,124,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 114.000000 && feature.properties['Tree Count'] <= 116.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(125,200,123,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 116.000000 && feature.properties['Tree Count'] <= 118.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(123,199,122,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 118.000000 && feature.properties['Tree Count'] <= 120.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(120,198,121,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 120.000000 && feature.properties['Tree Count'] <= 122.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(118,197,120,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 122.000000 && feature.properties['Tree Count'] <= 124.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(115,196,118,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 124.000000 && feature.properties['Tree Count'] <= 126.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(113,194,117,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 126.000000 && feature.properties['Tree Count'] <= 128.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(110,193,116,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 128.000000 && feature.properties['Tree Count'] <= 130.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(108,192,115,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 130.000000 && feature.properties['Tree Count'] <= 132.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(106,191,113,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 132.000000 && feature.properties['Tree Count'] <= 134.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(103,190,112,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 134.000000 && feature.properties['Tree Count'] <= 136.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(101,189,111,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 136.000000 && feature.properties['Tree Count'] <= 138.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(98,187,110,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 138.000000 && feature.properties['Tree Count'] <= 140.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(96,186,108,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 140.000000 && feature.properties['Tree Count'] <= 142.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(94,185,107,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 142.000000 && feature.properties['Tree Count'] <= 144.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(91,184,106,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 144.000000 && feature.properties['Tree Count'] <= 146.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(89,183,105,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 146.000000 && feature.properties['Tree Count'] <= 148.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(86,181,103,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 148.000000 && feature.properties['Tree Count'] <= 150.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(84,180,102,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 150.000000 && feature.properties['Tree Count'] <= 152.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(81,179,101,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 152.000000 && feature.properties['Tree Count'] <= 154.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(79,178,100,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 154.000000 && feature.properties['Tree Count'] <= 156.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(77,177,98,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 156.000000 && feature.properties['Tree Count'] <= 158.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(74,175,97,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 158.000000 && feature.properties['Tree Count'] <= 160.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(72,174,96,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 160.000000 && feature.properties['Tree Count'] <= 162.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(69,173,95,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 162.000000 && feature.properties['Tree Count'] <= 164.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(67,172,93,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 164.000000 && feature.properties['Tree Count'] <= 166.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(65,171,92,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 166.000000 && feature.properties['Tree Count'] <= 168.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(62,170,91,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 168.000000 && feature.properties['Tree Count'] <= 170.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(60,168,90,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 170.000000 && feature.properties['Tree Count'] <= 172.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(57,167,88,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 172.000000 && feature.properties['Tree Count'] <= 174.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(55,166,87,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 174.000000 && feature.properties['Tree Count'] <= 176.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(53,165,86,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 176.000000 && feature.properties['Tree Count'] <= 178.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(50,164,85,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 178.000000 && feature.properties['Tree Count'] <= 180.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(48,165,83,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 180.000000 && feature.properties['Tree Count'] <= 182.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(47,168,80,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 182.000000 && feature.properties['Tree Count'] <= 184.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(46,171,77,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 184.000000 && feature.properties['Tree Count'] <= 186.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(44,174,74,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 186.000000 && feature.properties['Tree Count'] <= 188.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(43,177,71,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 188.000000 && feature.properties['Tree Count'] <= 190.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(42,180,69,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 190.000000 && feature.properties['Tree Count'] <= 192.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(40,183,66,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 192.000000 && feature.properties['Tree Count'] <= 194.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(39,186,63,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 194.000000 && feature.properties['Tree Count'] <= 196.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(38,190,60,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 196.000000 && feature.properties['Tree Count'] <= 198.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(36,193,57,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 198.000000 && feature.properties['Tree Count'] <= 200.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(35,196,54,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 200.000000 && feature.properties['Tree Count'] <= 202.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(34,199,52,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 202.000000 && feature.properties['Tree Count'] <= 204.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(32,202,49,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 204.000000 && feature.properties['Tree Count'] <= 206.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(31,205,46,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 206.000000 && feature.properties['Tree Count'] <= 208.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(30,208,43,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 208.000000 && feature.properties['Tree Count'] <= 210.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(28,211,40,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 210.000000 && feature.properties['Tree Count'] <= 212.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(27,214,38,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 212.000000 && feature.properties['Tree Count'] <= 214.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(26,218,35,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 214.000000 && feature.properties['Tree Count'] <= 216.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(24,221,32,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 216.000000 && feature.properties['Tree Count'] <= 218.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(23,224,29,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 218.000000 && feature.properties['Tree Count'] <= 220.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(22,227,26,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 220.000000 && feature.properties['Tree Count'] <= 222.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(20,230,24,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 222.000000 && feature.properties['Tree Count'] <= 224.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(19,233,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 224.000000 && feature.properties['Tree Count'] <= 226.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(18,236,18,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 226.000000 && feature.properties['Tree Count'] <= 228.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(16,239,15,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 228.000000 && feature.properties['Tree Count'] <= 230.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(15,243,12,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 230.000000 && feature.properties['Tree Count'] <= 232.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(13,246,9,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 232.000000 && feature.properties['Tree Count'] <= 234.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(12,249,7,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 234.000000 && feature.properties['Tree Count'] <= 236.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(11,252,4,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['Tree Count'] >= 236.000000 && feature.properties['Tree Count'] <= 237.000000 ) {
+                return {
+                pane: 'pane_TreeCount_1',
+                opacity: 1,
+                color: 'rgba(9,255,1,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_TreeCount_1');
+        map.getPane('pane_TreeCount_1').style.zIndex = 401;
+        map.getPane('pane_TreeCount_1').style['mix-blend-mode'] = 'normal';
+        var layer_TreeCount_1 = new L.geoJson(json_TreeCount_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_TreeCount_1',
+            layerName: 'layer_TreeCount_1',
+            pane: 'pane_TreeCount_1',
+            onEachFeature: pop_TreeCount_1,
+            style: style_TreeCount_1_0,
+        });
+        bounds_group.addLayer(layer_TreeCount_1);
+        map.addLayer(layer_TreeCount_1);
+        function pop_SampleImageLocation_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Img Below</strong><br />' + (feature.properties['Img Below'] !== null ? autolinker.link(feature.properties['Img Below'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_SampleImageLocation_2_0() {
+            return {
+                pane: 'pane_SampleImageLocation_2',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(219,30,42,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_SampleImageLocation_2');
+        map.getPane('pane_SampleImageLocation_2').style.zIndex = 402;
+        map.getPane('pane_SampleImageLocation_2').style['mix-blend-mode'] = 'normal';
+        var layer_SampleImageLocation_2 = new L.geoJson(json_SampleImageLocation_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_SampleImageLocation_2',
+            layerName: 'layer_SampleImageLocation_2',
+            pane: 'pane_SampleImageLocation_2',
+            onEachFeature: pop_SampleImageLocation_2,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_SampleImageLocation_2_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_SampleImageLocation_2);
+        map.addLayer(layer_SampleImageLocation_2);
+        setBounds();
+        resetLabels([layer_TreeCount_1]);
+        map.on("zoomend", function(){
+            resetLabels([layer_TreeCount_1]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_TreeCount_1]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_TreeCount_1]);
+        });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,1 @@
+var json_SampleImageLocation_2 = {"type":"FeatureCollection","name":"SampleImageLocation_2","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"Img Below":null},"geometry":{"type":"Point","coordinates":[4.946370478311246,52.324267722221364]}}]}
