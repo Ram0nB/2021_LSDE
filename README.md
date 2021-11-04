@@ -1,10 +1,10 @@
 # 2021 Large Scale Data Engineering (LSDE)
 ## Mehmet Ege Arkin, Ramon Bussing, Mario van Rooij
 
-
+- [Report](Report.pdf)
 - [Project Relevance](#project-relevance)
 - [Installation](#installation)
-- [Visualisation](#visualisation)
+- [Visualisation](https://ram0nb.github.io/2021_LSDE/)
 
 ### Project Relevance
 Since climate change is currently one of the larger global challenges that humanity is facing, tools to monitor variables
@@ -36,7 +36,6 @@ pip install laspy[lazrs,laszip]
 ```
 
 ### Pipeline
-[Link to report](Report.pdf)
 
 ![Pipeline](pictures/drawing_new.png)
 
