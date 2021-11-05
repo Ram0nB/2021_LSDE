@@ -18,10 +18,6 @@ goal of this project is to count the number of trees in the Netherlands based on
 ### Installation
 Please don't. Generally causes a lot of package errors. If you do want to, please follow instructions below:
 
-```
-pip install xxxx
-```
-
 On 2 separate machines/environments run:
 
 ```
